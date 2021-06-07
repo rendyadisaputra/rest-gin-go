@@ -2,6 +2,6 @@ package maincontrollers
 
 type ErrorResponse struct{
 	Iserror int `json:"iserror"`
-	Msg error `json:"msg"`
-	Other []string `json:"other_data"`
+	Msg interface{} `json:"msg"`
+	Other []string `json:"other,omitempty"`
 }

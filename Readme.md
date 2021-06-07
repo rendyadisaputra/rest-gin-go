@@ -21,7 +21,7 @@
     -  templates
 
 
-REST API DESIGNS
+## REST API DESIGNS
 
 - POST /auth -- Auth Login , return JWT TOken
 - GET /users -- Get user list, return User list
@@ -31,3 +31,8 @@ REST API DESIGNS
 - PUT /user/@id -- Edit User by ID
 - DELETE /user/@id -- Delete User By ID
 - DELETE /user/@id/confirm -- Confirm Delete user User by ID
+
+
+## COMPILE & RUN
+compile ``` go build -o dist/app ```
+run ```dist/app```
