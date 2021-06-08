@@ -1,6 +1,9 @@
 ## Part of MVC Model
 
 - maincontrollers
+    - Business Logics, e.g
+        - Auth Login Controller
+        - Registration Controller
 - mainmodels
     - Object Modeling
     - Call Database
@@ -27,9 +30,8 @@
 
 
 - Public
-    - Auth
-        - POST /auth -- Auth Login , return JWT TOken
-        - POST /register -- Register New User
+    - POST /auth -- Auth Login , return JWT TOken
+    - POST /register -- Register New User
 - Users
     - GET /users -- Get user list, return User list
     - GET /users/filter?[params] -- Get User by Params eg, Id, email, name, date
@@ -47,7 +49,7 @@
     - DELETE /post/@id/confirm -- Confirm Delete post by ID
 
 ## COMPILE & RUN
-build Package ``` go build -o [dist/app] ```
-run ```[dist/app]```
-build plugin ``` go build -buildmode=plugin -o plugins/[plugin_name/plugin_name.so] plugins/[plugin_name/plugin_name.go] ```
-Unit Testing ``` go test ```
+- build Package ``` go build -o [dist/app] ```
+- run ```[dist/app]```
+- build plugin ``` go build -buildmode=plugin -o plugins/[plugin_name/plugin_name.so] plugins/[plugin_name/plugin_name.go] ```
+- Unit Testing ``` go test ```
