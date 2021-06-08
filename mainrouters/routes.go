@@ -9,9 +9,14 @@ import (
 
 
 func SetupRoute(router *gin.Engine){
+
+  /** Public **/
+  /** --- Auth     **/ router.POST("/auth", mc.AuthController.Login)
+  /** --- Register **/ router.POST("/register", mc.UserController.Register)
+  
     router.GET("/", mc.ShowIndexPage)
     router.GET("/users", mc.GetUsers)
-    router.POST("/auth", mc.AuthController.Login)
+    
     router.GET("/user/:id",md.ForLoggedInUser(), mc.UserController.GetUserByID)
     router.POST("/user/", mc.UserController.GetUserByID)
     router.PUT("/user/:id", mc.UserController.GetUserByID)

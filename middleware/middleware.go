@@ -44,11 +44,17 @@ func AuthenticationCheck(c *gin.Context) (*jwt.Claims, error){
 	}
 	
 	claims, err := algorithm.Decode(parsedToken[1])
+	
 	if(err == nil){
+		role, _ := claims.Get("Role");
+		c.Set("Role", role)
+
+		username, _ := claims.Get("Username");
+		c.Set("Username", username)
 		return claims, nil
 	}
-	Var_dump("token halo", claims, err); 
-	// Var_dump("token now", claims, err); 
+	
+	Var_dump("token now", claims, err); 
 	
 	return nil, errors.New("Unauthenticated Token")
 }

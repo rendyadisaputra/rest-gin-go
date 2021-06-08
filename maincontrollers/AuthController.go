@@ -3,12 +3,14 @@ import (
 	"net/http"
 	// "fmt"
 	"github.com/gin-gonic/gin"
-	// "../mainmodels"
+	model "../mainmodels"
 	. "../services/miscs"
 	"github.com/robbert229/jwt"
 	"encoding/json"
 	"errors"
 	"strings"
+	bc "golang.org/x/crypto/bcrypt"
+
   )
 
 type authController struct {}
@@ -26,30 +28,47 @@ type authRequest struct{
 	
 }
 
+func CheckPasswordHash(password, hash string) bool {
+    err := bc.CompareHashAndPassword([]byte(hash), []byte(password))
+    return err == nil
+}
+
+type claimSetup func(*jwt.Claims)
+
 func (AC authController) Login(c *gin.Context ) {
 	var req authRequest
 	num, _ := c.GetRawData()
 	json.Unmarshal(num, &req)
 	
-	if(req.Username != "username" && req.Password != "password"){
-		// var er error = errors.New("wrong username & password")
-		c.JSON(401, ErrorResponse{
+	userModel := model.UserModel()
+	userList,err := userModel.FindByUsername(req.Username)
+	
+	if(len(userList) == 0){
+		var l = ErrorResponse{
 			Iserror: 1,
-			Msg: "wrong username & password",
-		})
+			Msg: "Not Found",
+		}
+
+		c.JSON(404, l)
 		return 
 	}
-	// userList,err := userModel.GetUsers()
+
+	if(!CheckPasswordHash(req.Password, userList[0].Password)){
+		var l = ErrorResponse{
+			Iserror: 1,
+			Msg: "Wrong Username / Password",
+		}
+
+		c.JSON(403, l)
+		return 
+	}
 	
 	token, err := AC.generateToken(
 		func(claims *jwt.Claims) {
 			claims.Set("Role", "Admin")
 			claims.Set("Username", req.Username)	
 		})
-	// token := "test"
-	// var err error = nil
 	
-
 	if err != nil {
 		var l = ErrorResponse{
 			Iserror: 1,
@@ -66,7 +85,7 @@ func (AC authController) Login(c *gin.Context ) {
 	c.JSON(http.StatusOK, data)
 }
 
-type claimSetup func(*jwt.Claims)
+
 func (AC authController) generateToken(f claimSetup) (string, error) {
 	algorithm :=  jwt.HmacSha256(AC.GetSecretKey())
 	claims := jwt.NewClaim()
